@@ -36,21 +36,25 @@ class Robot extends Bitrix24Entity
      * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
      */
     //test23422222
-    public function add($code, $handler, $userId, $arName, $arProps, $arReturnProps, $isUseSubscription, $isUsePlacement)
+    //вавававав
+    public function add($code, $handler, $arName, $userId = null, $arProps = null, $arReturnProps = null, $isUsePlacement = null, $isUseSubscription = null)
     {
-        $arResult = $this->client->call(
-            'bizproc.robot.add',
-            array(
+        $robot_data =  array(
                 'CODE'              => $code,
                 'HANDLER'           => $handler,
-                'AUTH_USER_ID'      => $userId,
                 'NAME'              => $arName,
-                'PROPERTIES'        => $arProps,
-                'RETURN_PROPERTIES' => $arReturnProps,
-                'USE_PLACEMENT'     => $isUsePlacement === true ? 'Y' : 'N',
-                'USE_SUBSCRIPTION'  => $isUseSubscription === true ? 'Y' : 'N',
-            )
-        );
+            );
+        if($userId)
+            $robot_data['AUTH_USER_ID'] = $userId;
+        if($arProps)
+            $robot_data['PROPERTIES'] = $arProps;
+        if($arReturnProps)
+            $robot_data['RETURN_PROPERTIES'] = $arReturnProps;
+        if($isUsePlacement)
+            $robot_data['USE_PLACEMENT'] = $isUsePlacement === true ? 'Y' : 'N';
+        if($isUseSubscription)
+            $robot_data['USE_SUBSCRIPTION'] = $isUseSubscription === true ? 'Y' : 'N';  
+        $arResult = $this->client->call('bizproc.robot.add', $robot_data);
 
         return $arResult['result'];
     }
