@@ -35,7 +35,7 @@ class Robot extends Bitrix24Entity
      * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
      * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
      */
-    //test
+    //test23422222
     public function add($code, $handler, $userId, $arName, $arProps, $arReturnProps, $isUseSubscription, $isUsePlacement)
     {
         $arResult = $this->client->call(
