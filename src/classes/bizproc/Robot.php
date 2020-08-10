@@ -35,8 +35,7 @@ class Robot extends Bitrix24Entity
      * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
      * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
      */
-    //test23422222
-    //вавававав
+
     public function add($code, $handler, $arName, $userId = null, $arProps = null, $arReturnProps = null, $isUsePlacement = null, $isUseSubscription = null)
     {
         $robot_data =  array(
