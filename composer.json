@@ -1,14 +1,14 @@
 {
-    "name": "tobste/bitrix24-php-sdk",
+    "name": "webmens-ru/bitrix24-php-sdk",
     "description": "A powerfull PHP library for the Bitrix24 REST API",
     "keywords": ["Bitrix24", "PHP", "REST", "API"],
     "type": "library",
-    "homepage": "https://github.com/tobste/bitrix24-php-sdk",
+    "homepage": "https://github.com/webmens-ru/bitrix24-php-sdk",
     "license": "MIT",
     "authors": [
         {
-            "name": "tobste",
-            "homepage": "https://github.com/tobste"
+            "name": "webmens-ru",
+            "homepage": "https://github.com/webmens-ru"
         }
     ],
     "require": {
