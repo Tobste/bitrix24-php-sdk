@@ -100,18 +100,15 @@ class Order extends Bitrix24Entity
      * @link http://dev.1c-bitrix.ru/rest_help/crm/cdeals/crm_deal_update.php
      * @return array
      */
- /*   public function update($dealId, $dealFields, $params = array())
+    public function update($orderId, $dealFields)
     {
         $fullResult = $this->client->call(
-            'crm.deal.update',
+            'sale.order.update',
             array(
                 'id' => $dealId,
                 'fields' => $dealFields,
-                'params' => $params
             )
         );
         return $fullResult;
     }
-
-
 }
