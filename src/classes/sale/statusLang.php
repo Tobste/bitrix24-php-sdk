@@ -112,6 +112,6 @@ class StatusLang extends Bitrix24Entity
         );
         return $fullResult;
     }
-
+*/
 
 }
