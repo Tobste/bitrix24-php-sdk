@@ -105,7 +105,7 @@ class Order extends Bitrix24Entity
         $fullResult = $this->client->call(
             'sale.order.update',
             array(
-                'id' => $dealId,
+                'id' => $orderId,
                 'fields' => $orderFields,
             )
         );
