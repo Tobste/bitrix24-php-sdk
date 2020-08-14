@@ -111,4 +111,16 @@ class Order extends Bitrix24Entity
         );
         return $fullResult;
     }
+
+    public function get($orderId)
+    {
+        $fullResult = $this->client->call(
+            'sale.order.get',
+            array(
+                'id' => $orderId,
+            )
+        );
+        return $fullResult;
+    }
+
 }
