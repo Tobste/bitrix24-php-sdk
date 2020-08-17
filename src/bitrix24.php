@@ -103,11 +103,6 @@ class Bitrix24 implements iBitrix24
     protected $rawResponse;
 
     /**
-     * @var string redirect URI from application settings
-     */
-    protected $redirectUri;
-
-    /**
      * @var string portal GUID
      */
     protected $memberId;
@@ -256,7 +251,6 @@ class Bitrix24 implements iBitrix24
         $applicationSecret = $this->getApplicationSecret();
         $refreshToken = $this->getRefreshToken();
         $applicationScope = $this->getApplicationScope();
-        $redirectUri = $this->getRedirectUri();
 
         if (null === $applicationId) {
             throw new Bitrix24Exception('application id not found, you must call setApplicationId method before');
@@ -266,8 +260,6 @@ class Bitrix24 implements iBitrix24
             throw new Bitrix24Exception('application id not found, you must call setRefreshToken method before');
         } elseif (0 === count($applicationScope)) {
             throw new Bitrix24Exception('application scope not found, you must call setApplicationScope method before');
-        } elseif (null === $redirectUri) {
-            throw new Bitrix24Exception('application redirect URI not found, you must call setRedirectUri method before');
         }
 
         $url = 'https://' . self::OAUTH_SERVER . '/oauth/token/'
@@ -400,35 +392,6 @@ class Bitrix24 implements iBitrix24
             throw new Bitrix24Exception('application scope not set');
         }
     }
-
-    /**
-     * Get redirect URI
-     *
-     * @return string | null
-     */
-    public function getRedirectUri()
-    {
-        return $this->redirectUri;
-    }
-
-    /**
-     * Set redirect URI
-     *
-     * @param string $redirectUri
-     *
-     * @return true;
-     * @throws Bitrix24Exception
-     *
-     */
-    public function setRedirectUri($redirectUri)
-    {
-        if ('' === $redirectUri) {
-            throw new Bitrix24Exception('redirect URI is empty');
-        }
-        $this->redirectUri = $redirectUri;
-
-        return true;
-    }// end of SetApplicationId
 
     /**
      * Get domain
@@ -611,7 +574,6 @@ class Bitrix24 implements iBitrix24
             'APPLICATION_SCOPE' => $this->getApplicationScope(),
             'APPLICATION_ID' => $this->getApplicationId(),
             'APPLICATION_SECRET' => $this->getApplicationSecret(),
-            'REDIRECT_URI' => $this->getRedirectUri(),
             // network
             'RAW_REQUEST' => $this->getRawRequest(),
             'CURL_REQUEST_INFO' => $this->getRequestInfo(),
@@ -830,7 +792,6 @@ class Bitrix24 implements iBitrix24
         $applicationId = $this->getApplicationId();
         $applicationSecret = $this->getApplicationSecret();
         $applicationScope = $this->getApplicationScope();
-        $redirectUri = $this->getRedirectUri();
 
         if (null === $applicationId) {
             throw new Bitrix24Exception('application id not found, you must call setApplicationId method before');
@@ -838,8 +799,6 @@ class Bitrix24 implements iBitrix24
             throw new Bitrix24Exception('application id not found, you must call setApplicationSecret method before');
         } elseif (0 === count($applicationScope)) {
             throw new Bitrix24Exception('application scope not found, you must call setApplicationScope method before');
-        } elseif (null === $redirectUri) {
-            throw new Bitrix24Exception('application redirect URI not found, you must call setRedirectUri method before');
         }
 
         $url = 'https://' . self::OAUTH_SERVER . '/oauth/token/'

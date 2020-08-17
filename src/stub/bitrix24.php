@@ -77,28 +77,6 @@ class Bitrix24 implements iBitrix24
     }
 
     /**
-     * Set redirect URI
-     *
-     * @param string $redirectUri
-     *
-     * @throws Bitrix24Exception
-     *
-     * @return true;
-     */
-    public function setRedirectUri($redirectUri)
-    {
-    }
-
-    /**
-     * Get redirect URI
-     *
-     * @return string | null
-     */
-    public function getRedirectUri()
-    {
-    }
-
-    /**
      * Set access token
      *
      * @param string $accessToken
