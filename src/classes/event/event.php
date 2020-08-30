@@ -10,6 +10,8 @@ use Bitrix24\Presets\Event\Event as EventType;
  */
 class Event extends Bitrix24Entity
 {
+
+	public static $EVENT_TYPES = ['online','offline'];
 	/**
 	 * check is event handler code valid
 	 * @param $eventHandlerName
@@ -57,7 +59,7 @@ class Event extends Bitrix24Entity
 	 * @throws Bitrix24Exception
 	 * @return array
 	 */
-	public function bind($eventName, $handler, $authType = null)
+	public function bind($eventName, $handler, $authType = null, $eventType = 'online')
 	{
 		if(!$this->isEventHandlerCodeValid($eventName))
 		{
@@ -67,12 +69,17 @@ class Event extends Bitrix24Entity
 		{
 			throw new Bitrix24Exception('handler URL is null');
 		}
+		if(!in_array($eventType, self::$EVENT_TYPES))
+		{
+			throw new Bitrix24Exception('eventType is invalid');
+		}
 		$fullResult = $this->client->call(
 			'event.bind',
 			array(
 				'event' => $eventName,
 				'handler' => $handler,
-				'auth_type' => $authType
+				'auth_type' => $authType,
+				'event_type' => $eventType
 			)
 		);
 		return $fullResult;
@@ -86,14 +93,19 @@ class Event extends Bitrix24Entity
 	 * @param null $authType
 	 * @return array
 	 */
-	public function unbind($eventName = NULL, $handler = NULL, $authType = null)
+	public function unbind($eventName = NULL, $handler = NULL, $authType = null, $eventType = null)
 	{
+		if(!in_array($eventType, self::$EVENT_TYPES) && !is_null($eventType))
+		{
+			throw new Bitrix24Exception('eventType is invalid');
+		}
 		$fullResult = $this->client->call(
 			'event.unbind',
 			array(
 				'event' => $eventName,
 				'handler' => $handler,
-				'auth_type' => $authType
+				'auth_type' => $authType,
+				'event_type' => $eventType
 			)
 		);
 		return $fullResult;

@@ -20,15 +20,18 @@ class Placement extends Bitrix24Entity
      *
      * @return array
      */
-    public function bind($placementCode, $handlerUrl, $title, $description)
+    public function bind($placementCode, $handlerUrl, $title = null, $description = null, $groupName = null)
     {
-        $arResult = $this->client->call('placement.bind',
-            array(
-                'PLACEMENT' => $placementCode,
-                'HANDLER' => $handlerUrl,
-                'TITLE' => $title,
-                'DESCRIPTION' => $description
-            ));
+        $params = array(
+            'PLACEMENT' => $placementCode,
+            'HANDLER' => $handlerUrl,
+            'TITLE' => $title,
+            'DESCRIPTION' => $description
+        ); 
+        if($groupName){
+            $params['GROUP_NAME'] = $groupName;
+        }
+        $arResult = $this->client->call('placement.bind', $params);
         return $arResult;
     }
 
