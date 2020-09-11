@@ -156,4 +156,43 @@ class Imbot extends Bitrix24Entity
             'FIELDS' => $fields
         ));
     }
+
+    /**
+     * @param $botId Идентификатор чат-бота, от которого идет запрос
+     * @param $dialogId Идентификатор диалога, это либо USER_ID пользователя, либо chatXX - где XX идентификатор чата, передается в событии ONIMBOTMESSAGEADD и ONIMJOINCHAT
+     * @param $message Текст сообщения
+     * @param string $attach Вложение, необязательное поле
+     * @param string $keyboard Клавиатура, необязательное поле
+     * @param string $menu Контекстное меню, необязательное поле
+     * @param string $system Отображать сообщения в виде системного сообщения, необязательное поле, по умолчанию 'N'
+     * @param string $urlPreview Преобразовывать ссылки в rich-ссылки, необязательное поле, по умолчанию 'Y'
+     * @return array
+     * @throws Bitrix24ApiException
+     * @throws Bitrix24EmptyResponseException
+     * @throws \Bitrix24\Exceptions\Bitrix24Exception
+     * @throws \Bitrix24\Exceptions\Bitrix24IoException
+     * @throws \Bitrix24\Exceptions\Bitrix24MethodNotFoundException
+     * @throws \Bitrix24\Exceptions\Bitrix24PaymentRequiredException
+     * @throws \Bitrix24\Exceptions\Bitrix24PortalDeletedException
+     * @throws \Bitrix24\Exceptions\Bitrix24PortalRenamedException
+     * @throws \Bitrix24\Exceptions\Bitrix24SecurityException
+     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsExpiredException
+     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
+     * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
+     */
+    public function messageAdd($botId, $dialogId, $message, $attach = '', $keyboard = '', $menu = '', $system = 'N', $urlPreview = 'Y')
+    {
+        return $this->client->call('imbot.message.add', Array(
+
+            'BOT_ID' => $botId,
+            'DIALOG_ID' => $dialogId,
+            'MESSAGE' => $message,
+            'ATTACH' => $attach,
+            'KEYBOARD' => $keyboard,
+            'MENU' => $menu,
+            'SYSTEM' => $system,
+            'URL_PREVIEW' => $urlPreview
+
+        ));
+    }
 }
