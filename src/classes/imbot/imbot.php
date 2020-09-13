@@ -127,14 +127,12 @@ class Imbot extends Bitrix24Entity
         ));
     }
 
+
     /**
-     * update bot
-     *
      * @param $boId
      * @param string $clientId
      * @param array $fields
      * @return array
-     *
      * @throws Bitrix24ApiException
      * @throws Bitrix24EmptyResponseException
      * @throws \Bitrix24\Exceptions\Bitrix24Exception
@@ -148,7 +146,7 @@ class Imbot extends Bitrix24Entity
      * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
      * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
      */
-    public function update($boId,$clientId = '',$fields = array())
+    public function update($boId, $clientId = '', $fields = array())
     {
         return $this->client->call('imbot.update', array(
             'BOT_ID' => $boId, // Идентификатор чат-бота, которого нужно изменить (обяз.)
@@ -194,5 +192,75 @@ class Imbot extends Bitrix24Entity
             'URL_PREVIEW' => $urlPreview
 
         ));
+    }
+
+    /**
+     * @param $botId Идентификатор чат-бота владельца команды
+     * @param $command Текст команды, которую пользователь будет вводить в чатах
+     * @param $titleEn описание команды
+     * @param $titleRu описание команды
+     * @param $eventCommandAdd Ссылка на обработчик для команд
+     * @param false $common Если указан Y, то команда доступна во всех чатах, если N - то доступна только в тех, где присутствует чат-бот
+     * @param false $hidden Скрытая команда или нет - по умолчанию N
+     * @param false $extranetSupport Доступна ли команда пользователям Экстранет, по умолчанию N
+     * @param string $clientId строковый идентификатор чат-бота, используется только в режиме Вебхуков
+     * @param string $paramsEn какие данные после команды нужно вводить
+     * @param string $paramsRu какие данные после команды нужно вводить
+     * @return array
+     * @throws Bitrix24ApiException
+     * @throws Bitrix24EmptyResponseException
+     * @throws \Bitrix24\Exceptions\Bitrix24Exception
+     * @throws \Bitrix24\Exceptions\Bitrix24IoException
+     * @throws \Bitrix24\Exceptions\Bitrix24MethodNotFoundException
+     * @throws \Bitrix24\Exceptions\Bitrix24PaymentRequiredException
+     * @throws \Bitrix24\Exceptions\Bitrix24PortalDeletedException
+     * @throws \Bitrix24\Exceptions\Bitrix24PortalRenamedException
+     * @throws \Bitrix24\Exceptions\Bitrix24SecurityException
+     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsExpiredException
+     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
+     * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
+     */
+    public function commandAdd($botId, $command, $titleEn, $titleRu, $eventCommandAdd, $common = false, $hidden = false, $extranetSupport = false, $clientId = '', $paramsEn = 'some text', $paramsRu = 'some text')
+    {
+        return $this->client->call('imbot.message.add', Array(
+
+                'BOT_ID' => $botId, //
+                'COMMAND' => $command, //
+                'COMMON' => $common == true ? 'Y' : 'N', //
+                'HIDDEN' => $hidden == true ? 'Y' : 'N', //
+                'EXTRANET_SUPPORT' => $extranetSupport == true ? 'Y' : 'N', //
+                'CLIENT_ID' => $clientId, //
+                'LANG' => Array( // Массив переводов, обязательно указывать, как минимум, для RU и EN
+                    Array('LANGUAGE_ID' => 'en', 'TITLE' => $titleEn, 'PARAMS' => $paramsEn), // Язык, описание команды, какие данные после команды нужно вводить.
+                    Array('LANGUAGE_ID' => 'ru', 'TITLE' => $titleRu, 'PARAMS' => $paramsRu)
+                ),
+                'EVENT_COMMAND_ADD' => $eventCommandAdd, // Ссылка на обработчик для команд
+
+        ));
+    }
+
+    /**
+     * @param $commandId Идентификатор команды для удаления
+     * @param string $clientId Строковый идентификатор чат-бота, используется только в режиме Вебхуков
+     * @return array
+     * @throws Bitrix24ApiException
+     * @throws Bitrix24EmptyResponseException
+     * @throws \Bitrix24\Exceptions\Bitrix24Exception
+     * @throws \Bitrix24\Exceptions\Bitrix24IoException
+     * @throws \Bitrix24\Exceptions\Bitrix24MethodNotFoundException
+     * @throws \Bitrix24\Exceptions\Bitrix24PaymentRequiredException
+     * @throws \Bitrix24\Exceptions\Bitrix24PortalDeletedException
+     * @throws \Bitrix24\Exceptions\Bitrix24PortalRenamedException
+     * @throws \Bitrix24\Exceptions\Bitrix24SecurityException
+     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsExpiredException
+     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
+     * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
+     */
+    public function commandDelete($commandId, $clientId = '')
+    {
+        return $this->client->call('imbot.command.unregister', Array(
+            'COMMAND_ID' => $commandId,
+            'CLIENT_ID' => $clientId,
+            ));
     }
 }
