@@ -178,7 +178,7 @@ class Imbot extends Bitrix24Entity
      * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
      * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
      */
-    public function messageAdd($botId, $dialogId, $message, $attach = '', $keyboard = '', $menu = '', $system = 'N', $urlPreview = 'Y')
+    public function messageAdd($botId, $dialogId, $message, $attach = '', $keyboard = array(), $menu = '', $system = 'N', $urlPreview = 'Y')
     {
         return $this->client->call('imbot.message.add', Array(
 
