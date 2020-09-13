@@ -222,7 +222,7 @@ class Imbot extends Bitrix24Entity
      */
     public function commandAdd($botId, $command, $titleEn, $titleRu, $eventCommandAdd, $common = false, $hidden = false, $extranetSupport = false, $clientId = '', $paramsEn = 'some text', $paramsRu = 'some text')
     {
-        return $this->client->call('imbot.message.add', Array(
+        return $this->client->call('imbot.command.register', Array(
 
                 'BOT_ID' => $botId, //
                 'COMMAND' => $command, //
