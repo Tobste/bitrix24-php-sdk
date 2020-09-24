@@ -24,20 +24,20 @@ class Imbot extends Bitrix24Entity
     /**
      * create new bot
      *
-     * @param $code
-     * @param string $type
-     * @param $eventHandler
-     * @param string $openLine
-     * @param string $clientId
-     * @param $name
-     * @param string $lastName
+     * @param $code Строковой идентификатор бота, уникальный в рамках вашего приложения (обяз.)
+     * @param string $type Тип бота, B - чат-бот, ответы поступают сразу, H - человек, ответы поступают с задержкой от 2-х до 10 секунд, O - чат-бот для Открытых линий, S - чат-бот с повышенными привилегиями (supervisor)
+     * @param $eventHandler Ссылка на обработчик событий поступивших от сервера, см. Обработчики событий ниже (обяз).
+     * @param string $openLine Включение режима поддержки Открытых линий, можно не указывать, если TYPE = 'O'
+     * @param string $clientId строковый идентификатор чат-бота, используется только в режиме Вебхуков
+     * @param $name Имя чат-бота (обязательное одно из полей NAME или LAST_NAME)
+     * @param string $lastName Фамилия чат-бота (обязательное одно из полей NAME или LAST_NAME)
      * @param string $color chat color in Bitrix24\Presets\Im\iChatColor for mobile
-     * @param string $email
-     * @param string $birthday
-     * @param string $workPosition
-     * @param string $personalWWW
-     * @param string $gender
-     * @param string $photo
+     * @param string $email E-mail для связи. НЕЛЬЗЯ использовать e-mail, дублирующий e-mail реальных пользователей
+     * @param string $birthday День рождения в формате YYYY-mm-dd
+     * @param string $workPosition Занимаемая должность, используется как описание чат-бота
+     * @param string $personalWWW Ссылка на сайт
+     * @param string $gender Пол чат-бота, допустимые значения M -  мужской, F - женский, пусто, если не требуется указывать
+     * @param string $photo Аватар чат-бота - base64
      * @return array
      * @throws Bitrix24ApiException
      * @throws Bitrix24EmptyResponseException
@@ -55,21 +55,21 @@ class Imbot extends Bitrix24Entity
     public function add($code, $type = 'B', $eventHandler, $openLine = 'N', $clientId = '', $name, $lastName = '', $color = 'GREEN', $email = '', $birthday = '2016-03-11', $workPosition = '',$personalWWW = '',$gender = '',$photo ='')
     {
         $arParams = array(
-            'CODE' => $code, // Строковой идентификатор бота, уникальный в рамках вашего приложения (обяз.)
-            'TYPE' => $type, // Тип бота, B - чат-бот, ответы поступают сразу, H - человек, ответы поступают с задержкой от 2-х до 10 секунд, O - чат-бот для Открытых линий, S - чат-бот с повышенными привилегиями (supervisor)
-            'EVENT_HANDLER' => $eventHandler, // Ссылка на обработчик событий поступивших от сервера, см. Обработчики событий ниже (обяз).
-            'OPENLINE' => $openLine, // Включение режима поддержки Открытых линий, можно не указывать, если TYPE = 'O'
-            'CLIENT_ID' => $clientId, // строковый идентификатор чат-бота, используется только в режиме Вебхуков
+            'CODE' => $code, //
+            'TYPE' => $type, //
+            'EVENT_HANDLER' => $eventHandler, //
+            'OPENLINE' => $openLine, //
+            'CLIENT_ID' => $clientId, //
             'PROPERTIES' => Array( // Личные данные чат-бота (обяз.)
-                'NAME' => $name, // Имя чат-бота (обязательное одно из полей NAME или LAST_NAME)
-                'LAST_NAME' => $lastName, // Фамилия чат-бота (обязательное одно из полей NAME или LAST_NAME)
-                'COLOR' => $color, // Цвет чат-бота для мобильного приложения RED, GREEN, MINT, LIGHT_BLUE, DARK_BLUE, PURPLE, AQUA, PINK, LIME, BROWN,  AZURE, KHAKI, SAND, MARENGO, GRAY, GRAPHITE
-                'EMAIL' => $email, // E-mail для связи. НЕЛЬЗЯ использовать e-mail, дублирующий e-mail реальных пользователей
-                'PERSONAL_BIRTHDAY' => $birthday, // День рождения в формате YYYY-mm-dd
-                'WORK_POSITION' => $workPosition, // Занимаемая должность, используется как описание чат-бота
-                'PERSONAL_WWW' => $personalWWW, // Ссылка на сайт
-                'PERSONAL_GENDER' => $gender, // Пол чат-бота, допустимые значения M -  мужской, F - женский, пусто, если не требуется указывать
-                'PERSONAL_PHOTO' => $photo, // Аватар чат-бота - base64
+                'NAME' => $name, //
+                'LAST_NAME' => $lastName, //
+                'COLOR' => $color, //
+                'EMAIL' => $email, //
+                'PERSONAL_BIRTHDAY' => $birthday, //
+                'WORK_POSITION' => $workPosition, //
+                'PERSONAL_WWW' => $personalWWW, //
+                'PERSONAL_GENDER' => $gender, //
+                'PERSONAL_PHOTO' => $photo, //
         )
     );
         return $this->client->call('imbot.register', $arParams);
@@ -262,5 +262,87 @@ class Imbot extends Bitrix24Entity
             'COMMAND_ID' => $commandId,
             'CLIENT_ID' => $clientId,
             ));
+    }
+
+    /**
+     * @param $commandId Идентификатор команды
+     * @param $eventCommandId Ссылка на обработчик команд
+     * @param false $hidden Скрытая команда или нет
+     * @param false $extranetSupport Доступна ли команда пользователям Экстранет
+     * @param string $clientId Строковый идентификатор чат-бота, используется только в режиме Вебхуков
+     * @param array $lang Массив переводов (обязательно указывать, как минимум, для RU и EN)
+     * @return array
+     * @throws Bitrix24ApiException
+     * @throws Bitrix24EmptyResponseException
+     * @throws \Bitrix24\Exceptions\Bitrix24Exception
+     * @throws \Bitrix24\Exceptions\Bitrix24IoException
+     * @throws \Bitrix24\Exceptions\Bitrix24MethodNotFoundException
+     * @throws \Bitrix24\Exceptions\Bitrix24PaymentRequiredException
+     * @throws \Bitrix24\Exceptions\Bitrix24PortalDeletedException
+     * @throws \Bitrix24\Exceptions\Bitrix24PortalRenamedException
+     * @throws \Bitrix24\Exceptions\Bitrix24SecurityException
+     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsExpiredException
+     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
+     * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
+     */
+    public function commandUpdate($commandId, $eventCommandId, $hidden = false, $extranetSupport = false, $clientId = '', $lang = array())
+    {
+        return $this->client->call('imbot.command.update', Array(
+            'COMMAND_ID' => $commandId,
+            'FIELDS' => Array(
+                'EVENT_COMMAND_ADD' => $eventCommandId,
+                'HIDDEN' => $hidden == true ? 'Y' : 'N',
+                'EXTRANET_SUPPORT' => $extranetSupport == true ? 'Y' : 'N',
+                'CLIENT_ID' => $clientId,
+                'LANG' => $lang
+            )
+        ));
+    }
+
+
+    /**
+     * @param $botId Идентификатор чат-бота, от которого идет запрос
+     * @param $messageId Идентификатор сообщения
+     * @param null $message Текст сообщения, необязательное поле, если передать пустое значение - сообщение будет удалено
+     * @param null $attach Вложение, необязательное поле
+     * @param null $keyboard Клавиатура, необязательное поле
+     * @param null $menu Контекстное меню, необязательное поле
+     * @param null $urlPreview Преобразовывать ссылки в rich-ссылки, необязательное поле
+     * @return array
+     * @throws Bitrix24ApiException
+     * @throws Bitrix24EmptyResponseException
+     * @throws \Bitrix24\Exceptions\Bitrix24Exception
+     * @throws \Bitrix24\Exceptions\Bitrix24IoException
+     * @throws \Bitrix24\Exceptions\Bitrix24MethodNotFoundException
+     * @throws \Bitrix24\Exceptions\Bitrix24PaymentRequiredException
+     * @throws \Bitrix24\Exceptions\Bitrix24PortalDeletedException
+     * @throws \Bitrix24\Exceptions\Bitrix24PortalRenamedException
+     * @throws \Bitrix24\Exceptions\Bitrix24SecurityException
+     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsExpiredException
+     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
+     * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
+     */
+    public function messageUpdate($botId, $messageId, $message = null, $attach = null, $keyboard = null, $menu = null, $urlPreview = null)
+    {
+        $fields = [
+            'BOT_ID' => $botId,
+            'MESSAGE_ID' => $messageId, //
+        ];
+        if($message != null) {
+            $fields['MESSAGE'] = $message; //
+        }
+        if($attach != null) {
+            $fields['ATTACH'] = $attach; //
+        }
+        if($keyboard != null) {
+            $fields['KEYBOARD'] = $keyboard; //
+        }
+        if($menu != null) {
+            $fields['MENU'] = $menu; //
+        }
+        if($urlPreview != null) {
+            $fields['URL_PREVIEW'] = $urlPreview == true? 'Y' : 'N'; //
+        }
+        return $this->client->call('imbot.message.update', $fields);
     }
 }
